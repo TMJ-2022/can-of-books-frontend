@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -9,9 +10,16 @@ class BestBooks extends React.Component {
   }
 
   /* TODO: Make a GET request to your API to fetch books for the logged in user  */
+  // bookListData = axios.get('https://can-of-books-301n24.herokuapp.com/');
+  // let bookListData = axios.get('http://localhost:3001');
+
+  getBooks = async () => {
+   let bookListData = await axios.get('http://localhost:3001/books'); 
+    console.log(bookListData);
+  }
 
   render() {
-
+    this.getBooks();
     /* TODO: render user's books in a Carousel */
 
     return (
