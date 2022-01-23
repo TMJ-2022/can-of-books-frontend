@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import Profile from './Profile'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BestBooks from './BestBooks';
 import {
@@ -43,6 +44,9 @@ class App extends React.Component {
               
             </Route>
             {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
+            <Route exact path="/profile">
+              <Profile user={this.state.user} />
+            </Route>
           </Switch>
           <Footer />
         </Router>
