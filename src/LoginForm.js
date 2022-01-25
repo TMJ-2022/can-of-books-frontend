@@ -1,44 +1,34 @@
+import React from "react";
 import { Component } from "react";
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
 
 class LoginForm extends Component {
+
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      email: '',
       username: '',
-    }
+      email: ''
+    };
   }
 
-  formHandler = (event) => {
-    if (event.target.id === 'formUserName') {
-      this.setState({
-        username: event.target.value
-      });
-    } else if (event.target.id === 'formEmail') {
-      this.setState({
-        email: event.target.value
-      });
-    }
+  changeHandler = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  }
+
+  submitHandler = (event) => {
+    event.preventDefault();
+    this.props.onLogin(this.state);
   }
 
   render() {
-    /* TODO: create a simple login form that collects username and and email, and lets parent component know when form has been submitted */
     return (
-      <Form onSubmit={ (event) => this.props.loginHandler({username: this.state.username, email: this.state.email}, event)}>
-        <Form.Group className="mb-3" controlId="formEmail">
-          <Form.Label>E-Mail</Form.Label>
-          <Form.Control onChange={this.formHandler} type="email" placeholder="Enter email" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formUserName">
-          <Form.Label>Username</Form.Label>
-          <Form.Control onChange={this.formHandler} type="username" placeholder="Enter Username" />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
+      <form onSubmit={this.submitHandler}>
+        <input type="text" placeholder="name" name="username" onChange={this.changeHandler} value={this.state.username} />
+        <input type="text" placeholder="email" name="email" onChange={this.changeHandler} value={this.state.email} />
+        <button>OK</button>
+      </form>
     );
   }
 };
