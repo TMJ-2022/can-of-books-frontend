@@ -1,10 +1,29 @@
 import { Component } from 'react'
+import LoginForm from './LoginForm'
 
 export default class LoginButton extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: false
+    }
+  }
+
+  clickHandler = () => {
+    this.setState({ show: !this.state.show });
+  };
+
   render() {
 
-    /* TODO: Render a button with label 'Log In'. When the button is clicked then show LoginForm instead */
-    return <p>LoginButton coming soon</p>
+    if (this.state.show) {
+      return <LoginForm onLogin={this.props.onLogin} />
+    } else {
+      return (
+        <button onClick={this.clickHandler}>
+          Log In
+        </button>
+      )
+    }
   }
 }
