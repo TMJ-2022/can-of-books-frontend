@@ -9,6 +9,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import Login from './Login'
 
 class App extends React.Component {
 
@@ -19,7 +20,8 @@ class App extends React.Component {
     }
   }
 
-  loginHandler = (user) => {
+  loginHandler = (user, event) => {
+    event.preventDefault();
     this.setState({
       user,
     })
@@ -38,14 +40,16 @@ class App extends React.Component {
           <Header user={this.state.user} onLogout={this.logoutHandler} />
           <Switch>
             <Route exact path="/">
-              {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */
+              {this.state.user ? (
                 <BestBooks />
-              }
+                ) : (
+                <Login loginHandler={this.loginHandler} />
+              )}
               
             </Route>
             {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
             <Route exact path="/profile">
-              <Profile user={this.state.user} />
+              {this.state.user ? <Profile user={this.state.user}/> : <h3>Please Login to View Profile</h3> }
             </Route>
           </Switch>
           <Footer />
