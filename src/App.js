@@ -10,6 +10,9 @@ import {
   Route
 } from "react-router-dom";
 import Login from './Login'
+import axios from 'axios';
+
+const SERVER = process.env.REACT_APP_SERVER;
 
 class App extends React.Component {
 
@@ -31,6 +34,26 @@ class App extends React.Component {
       user: null,
     })
   }
+
+  // handleUpdateBook = async bookToBeUpdated => {
+  //   try {
+  //     await axios.put(`${SERVER}/books/${bookToBeUpdated._id}`, bookToBeUpdated);
+
+  //     const updatedBooks = this.state.books.map(existingBook => {
+  //       if (existingBook._id === bookToBeUpdated._id) {
+  //         return bookToBeUpdated;
+  //       } else {
+  //         return existingBook;
+  //       }
+  //     });
+
+  //     this.setState({
+  //       books: updatedBooks
+  //     })
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   render() {
     return (
