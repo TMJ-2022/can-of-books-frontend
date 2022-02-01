@@ -35,25 +35,25 @@ class App extends React.Component {
     })
   }
 
-  // handleUpdateBook = async bookToBeUpdated => {
-  //   try {
-  //     await axios.put(`${SERVER}/books/${bookToBeUpdated._id}`, bookToBeUpdated);
+  handleUpdateBook = async bookToBeUpdated => {
+    try {
+      await axios.put(`${SERVER}/books/${bookToBeUpdated._id}`, bookToBeUpdated);
 
-  //     const updatedBooks = this.state.books.map(existingBook => {
-  //       if (existingBook._id === bookToBeUpdated._id) {
-  //         return bookToBeUpdated;
-  //       } else {
-  //         return existingBook;
-  //       }
-  //     });
+      const updatedBooks = this.state.books.map(existingBook => {
+        if (existingBook._id === bookToBeUpdated._id) {
+          return bookToBeUpdated;
+        } else {
+          return existingBook;
+        }
+      });
 
-  //     this.setState({
-  //       books: updatedBooks
-  //     })
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+      this.setState({
+        books: updatedBooks
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   render() {
     return (

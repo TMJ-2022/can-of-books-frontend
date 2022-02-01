@@ -12,14 +12,15 @@ class UpdateBookForm extends React.Component {
       title: this.props.book?.title,
       description: this.props.book?.description,
       status: this.props.book?.status,
-      email: this.props.email?.email,
+      email: this.props.book?.email,
     }
   }
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.handleUpdateBook(this.state);
-    this.handleClose();
+    console.log(this.state);
+    this.props.onUpdate(this.state);
+    this.props.onClose();
   };
 
   handleTitleChange = event => {
@@ -31,21 +32,16 @@ class UpdateBookForm extends React.Component {
   };
 
   handleStatusChange = event => {
-    this.setState({ status: event.target.checked });
+    this.setState({ status: event.target.value });
   };
 
-  handleEmailChange = event => {
-    this.setState({ email: event.target.checked });
-  };
-
-  handleClose = () => {
-    this.props.onClose();
-  }
-
+  // handleEmailChange = event => {
+  //   this.setState({ email: event.target.checked });
+  // };
 
   render() {
     return (
-      <Modal show={this.props.show} onHide={this.handleClose}>
+      <Modal show={this.props.show} onHide={this.props.onClose}>
         <Modal.Header closeButton>
           <Modal.Title>Update a Book</Modal.Title>
         </Modal.Header>
@@ -68,18 +64,20 @@ class UpdateBookForm extends React.Component {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Check type="text" label="Status" onChange={this.handleStatusChange} checked={this.state.status} />
+              <Form.Label>Status</Form.Label>
+              <Form.Control type="text" label="Status" onChange={this.handleStatusChange} value={this.state.status} />
             </Form.Group>
+
             <Button variant="primary" type="submit">
               Submit
             </Button>
 
-            <Form.Group className="mb-3">
+            {/* <Form.Group className="mb-3">
               <Form.Check type="text" label="Email" onChange={this.handleEmailChange} checked={this.state.email} />
             </Form.Group>
             <Button variant="primary" type="submit">
               Submit
-            </Button>
+            </Button> */}
 
           </Form>
         </Modal.Body>

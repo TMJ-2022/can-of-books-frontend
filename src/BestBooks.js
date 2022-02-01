@@ -12,14 +12,17 @@ class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: []
+      books: [],
+      showUpdate: false,
+      selectedBook: {},
     }
   }
 
 
 
   componentDidMount() {
-    this.getBooks();
+    console.log(this.props);
+    this.getBooks(this.props.user.email);
   }
 
 
@@ -57,10 +60,24 @@ class BestBooks extends React.Component {
     axios(config);
   }
 
+  handleShowUpdateModal = (book) => {
+    this.setState({
+      showUpdate: true,
+      selectedBook: book,
+    })
+  }
+
+  onClose = () => {
+    this.setState({
+      showUpdate: false,
+      selectedBook: {},
+    })
+  }
+
   // updateBook = () => {
   handleUpdateBook = async bookToBeUpdated => {
     try {
-      await axios.put(`${SERVER}/books/${bookToBeUpdated._id}`, bookToBeUpdated);
+      await axios.put(`${SERVER}/books/${bookToBeUpdated._id}/email=${this.props.user.email}`, bookToBeUpdated);
 
       const updatedBooks = this.state.books.map(existingBook => {
         if (existingBook._id === bookToBeUpdated._id) {
@@ -94,7 +111,7 @@ class BestBooks extends React.Component {
               <p style={{color: "#561D5E"}}>{book.description}</p>
               <p style={{color: "#561D5E"}}>{book.status}</p>
               <Button id='remove' onClick={() => this.removeBook(book)}>REMOVE</Button>
-              <Button id='update' onClick={() => this.handleUpdateBook(book)}>UPDATE</Button>
+              <Button id='update' onClick={() => this.handleShowUpdateModal(book)}>UPDATE</Button>
             </Carousel.Caption>
             </Carousel.Item>
             ))}
@@ -104,8 +121,8 @@ class BestBooks extends React.Component {
         )}
       {/* </>
     <> */}
-      {this.state.selectedBook && (
-      <UpdateBookForm cat={this.state.selectedBook} onUpdate={this.props.onUpdate} onClose={this.onClose} show={this.state.selectedBook !== null} />)}
+      {this.state.showUpdate && (
+      <UpdateBookForm book={this.state.selectedBook} onUpdate={this.handleUpdateBook} onClose={this.onClose} show={this.state.showUpdate} />)}
     </>
     )
   }
