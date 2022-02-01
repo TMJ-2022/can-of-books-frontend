@@ -9,7 +9,7 @@ class BookFormModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      title: '',
       description: '',
       status: 'Inspirational',
     }
@@ -27,7 +27,7 @@ class BookFormModal extends React.Component {
       url: '/books/',
       data: {
         email: this.props.user.email,
-        name: this.state.name,
+        title: this.state.title,
         description: this.state.description,
         status: this.state.status,
       }
@@ -46,11 +46,13 @@ class BookFormModal extends React.Component {
         <Modal.Header closeButton>
           <Modal.Title>Add Your Favorite Book</Modal.Title>
         </Modal.Header>
+
         <Form>
-          <Form.Group controlId="name">
-            <Form.Label>Book Name</Form.Label>
-            <Form.Control onChange={(e) => this.setState({ name: e.target.value })} type="text" placeholder="book name" />
+          <Form.Group controlId="title">
+            <Form.Label>Book Title</Form.Label>
+            <Form.Control onChange={(e) => this.setState({ title: e.target.value })} type="text" placeholder="book title" />
           </Form.Group>
+
           <Form.Group controlId="description">
             <Form.Label>Book description</Form.Label>
             <Form.Control onChange={(e) => this.setState({ description: e.target.value })} type="text" placeholder="book description" />
