@@ -15,7 +15,7 @@ export default class AddBook extends React.Component {
     this.setState({ show: true });
   }
 
-  handleClose = () => {
+  onClose = () => {
     this.setState({ show: false });
   }
 
@@ -26,7 +26,7 @@ export default class AddBook extends React.Component {
         <Button onClick={this.addBook}>Add a Book to the Collection!</Button>
         <BookFormModal
           user={this.props.user}
-          close={this.handleClose}
+          close={this.onClose}
           getBooks={this.props.getBooks}
           show={this.state.show}
         />

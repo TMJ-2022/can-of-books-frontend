@@ -4,34 +4,38 @@ import AddBook from './AddBook';
 import Carousel from 'react-bootstrap/Carousel'
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import UpdateBookForm from './UpdateBookForm';
 
-const  SERVER = process.env.REACT_APP_SERVER;
+const SERVER = process.env.REACT_APP_SERVER;
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: []
+      books: [],
+      showUpdate: false,
+      selectedBook: {},
     }
   }
 
 
 
   componentDidMount() {
-    this.getBooks();
+    console.log(this.props);
+    this.getBooks(this.props.user.email);
   }
 
 
   getBooks = async (email = null) => {
-   let apiUrl = `${SERVER}/books`; 
+    let apiUrl = `${SERVER}/books`;
 
-   if(email) {
-     apiUrl += `?email=${email}`;
-   }
+    if (email) {
+      apiUrl += `?email=${email}`;
+    }
 
     try {
       const response = await axios.get(apiUrl);
-      if(response.data !== null){
+      if (response.data !== null) {
         this.setState({ books: response.data });
       }
     } catch (error) {
@@ -48,15 +52,49 @@ class BestBooks extends React.Component {
     this.setState({ books: createdBooks });
 
     const config = {
-        params: { email: this.props.user.email },
-        method: 'delete',
-        baseURL: process.env.REACT_APP_SERVER,
-        url: `/books/${id}`
-      }
-      axios(config);
+      params: { email: this.props.user.email },
+      method: 'delete',
+      baseURL: process.env.REACT_APP_SERVER,
+      url: `/books/${id}`
     }
-  
+    axios(config);
+  }
 
+  handleShowUpdateModal = (book) => {
+    this.setState({
+      showUpdate: true,
+      selectedBook: book,
+    })
+  }
+
+  onClose = () => {
+    this.setState({
+      showUpdate: false,
+      selectedBook: {},
+    })
+  }
+
+  // updateBook = () => {
+  handleUpdateBook = async bookToBeUpdated => {
+    try {
+      await axios.put(`${SERVER}/books/${bookToBeUpdated._id}?email=${this.props.user.email}`, bookToBeUpdated);
+
+      const updatedBooks = this.state.books.map(existingBook => {
+        if (existingBook._id === bookToBeUpdated._id) {
+          return bookToBeUpdated;
+        } else {
+          return existingBook;
+        }
+      });
+
+      this.setState({
+        books: updatedBooks
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
   render() {
     return (
       <>
@@ -72,7 +110,8 @@ class BestBooks extends React.Component {
               <h2 style={{color: "#561D5E"}}>{book.title}</h2>
               <p style={{color: "#561D5E"}}>{book.description}</p>
               <p style={{color: "#561D5E"}}>{book.status}</p>
-              <Button onClick={() => this.removeBook(book)}>REMOVE</Button>
+              <Button id='remove' onClick={() => this.removeBook(book)}>REMOVE</Button>
+              <Button id='update' onClick={() => this.handleShowUpdateModal(book)}>UPDATE</Button>
             </Carousel.Caption>
             </Carousel.Item>
             ))}
@@ -80,7 +119,11 @@ class BestBooks extends React.Component {
         ) : (
           <h3>No Books Found 🙁</h3>
         )}
-      </>
+      {/* </>
+    <> */}
+      {this.state.showUpdate && (
+      <UpdateBookForm book={this.state.selectedBook} onUpdate={this.handleUpdateBook} onClose={this.onClose} show={this.state.showUpdate} />)}
+    </>
     )
   }
 }
