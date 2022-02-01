@@ -77,7 +77,7 @@ class BestBooks extends React.Component {
   // updateBook = () => {
   handleUpdateBook = async bookToBeUpdated => {
     try {
-      await axios.put(`${SERVER}/books/${bookToBeUpdated._id}/email=${this.props.user.email}`, bookToBeUpdated);
+      await axios.put(`${SERVER}/books/${bookToBeUpdated._id}?email=${this.props.user.email}`, bookToBeUpdated);
 
       const updatedBooks = this.state.books.map(existingBook => {
         if (existingBook._id === bookToBeUpdated._id) {

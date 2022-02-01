@@ -39,6 +39,10 @@ class UpdateBookForm extends React.Component {
   //   this.setState({ email: event.target.checked });
   // };
 
+  handleClose = () => {
+    this.props.onClose();
+  }
+
   render() {
     return (
       <Modal show={this.props.show} onHide={this.props.onClose}>
