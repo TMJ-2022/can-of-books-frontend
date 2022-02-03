@@ -1,4 +1,5 @@
 import React from 'react';
+import { withAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import AddBook from './AddBook';
 import Carousel from 'react-bootstrap/Carousel'
@@ -20,9 +21,28 @@ class BestBooks extends React.Component {
 
 
 
-  componentDidMount() {
-    console.log(this.props);
-    this.getBooks(this.props.user.email);
+  async componentDidMount() {
+
+    if (this.props.auth0.isAuthenticated) {
+
+      const res = await this.props.auth0.getIdTokenClaims();
+
+      const jwt = res.__raw;
+
+      console.log("jwt: ", jwt);
+
+      const config = {
+        headers: { "Authorization": `Bearer ${jwt}` },
+        method: 'get',
+        baseURL: process.env.REACT_APP_SERVER,
+        url: '/books'
+      }
+
+      const booksResponse = await axios(config);
+      console.log(booksResponse.data);
+
+      this.setState({ books: booksResponse.data });
+    }
   }
 
 
@@ -44,7 +64,7 @@ class BestBooks extends React.Component {
     console.log("Book state", this.state.books);
   }
 
-  removeBook = (book) => {
+  removeBook = async (book) => {
     console.log('book', book);
     const id = book._id;
     let createdBooks = this.state.books;
@@ -52,12 +72,13 @@ class BestBooks extends React.Component {
     this.setState({ books: createdBooks });
 
     const config = {
-      params: { email: this.props.user.email },
+      params: { email: this.props.auth0.user.email },
       method: 'delete',
       baseURL: process.env.REACT_APP_SERVER,
       url: `/books/${id}`
     }
-    axios(config);
+    const removeResponse = await axios(config);
+    console.log(removeResponse.data);
   }
 
   handleShowUpdateModal = (book) => {
@@ -77,7 +98,8 @@ class BestBooks extends React.Component {
   // updateBook = () => {
   handleUpdateBook = async bookToBeUpdated => {
     try {
-      await axios.put(`${SERVER}/books/${bookToBeUpdated._id}?email=${this.props.user.email}`, bookToBeUpdated);
+      console.log(this.props)
+      await axios.put(`${SERVER}/books/${bookToBeUpdated._id}?email=${this.props.auth0.user.email}`, bookToBeUpdated);
 
       const updatedBooks = this.state.books.map(existingBook => {
         if (existingBook._id === bookToBeUpdated._id) {
@@ -96,6 +118,7 @@ class BestBooks extends React.Component {
   }
   
   render() {
+    console.log(this.state);
     return (
       <>
 
@@ -128,4 +151,4 @@ class BestBooks extends React.Component {
   }
 }
 
-export default BestBooks;
+export default withAuth0(BestBooks);
