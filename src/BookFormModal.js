@@ -26,10 +26,11 @@ class BookFormModal extends React.Component {
       baseURL: process.env.REACT_APP_SERVER,
       url: '/books/',
       data: {
-        email: this.props.user.email,
-        title: this.state.title,
-        description: this.state.description,
-        status: this.state.status,
+
+        // email: this.props.user.email,
+        // title: this.state.title,
+        // description: this.state.description,
+        // status: this.state.status,
       }
     }
 

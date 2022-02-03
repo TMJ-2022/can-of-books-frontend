@@ -21,7 +21,7 @@ class BestBooks extends React.Component {
 
 
 
-  componentDidMount() {
+  async componentDidMount() {
 
     if (this.props.auth0.isAuthenticated) {
 
@@ -64,7 +64,7 @@ class BestBooks extends React.Component {
     console.log("Book state", this.state.books);
   }
 
-  removeBook = (book) => {
+  removeBook = async (book) => {
     console.log('book', book);
     const id = book._id;
     let createdBooks = this.state.books;
@@ -72,12 +72,13 @@ class BestBooks extends React.Component {
     this.setState({ books: createdBooks });
 
     const config = {
-      params: { email: this.props.user.email },
+      params: { email: this.props.auth0.user.email },
       method: 'delete',
       baseURL: process.env.REACT_APP_SERVER,
       url: `/books/${id}`
     }
-    axios(config);
+    const removeResponse = await axios(config);
+    console.log(removeResponse.data);
   }
 
   handleShowUpdateModal = (book) => {
@@ -97,7 +98,8 @@ class BestBooks extends React.Component {
   // updateBook = () => {
   handleUpdateBook = async bookToBeUpdated => {
     try {
-      await axios.put(`${SERVER}/books/${bookToBeUpdated._id}?email=${this.props.user.email}`, bookToBeUpdated);
+      console.log(this.props)
+      await axios.put(`${SERVER}/books/${bookToBeUpdated._id}?email=${this.props.auth0.user.email}`, bookToBeUpdated);
 
       const updatedBooks = this.state.books.map(existingBook => {
         if (existingBook._id === bookToBeUpdated._id) {

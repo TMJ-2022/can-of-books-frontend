@@ -12,7 +12,6 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import Login from './Login'
 import axios from 'axios';
 
 const SERVER = process.env.REACT_APP_SERVER;
@@ -62,23 +61,24 @@ class App extends React.Component {
     return (
       <>
         <Router>
-          <Header user={this.state.user} onLogout={this.logoutHandler} />
+          <Header user={this.props.auth0.isAuthenticated} onLogout={this.logoutHandler} />
           <Switch>
-            <Route exact path="/">
+            {/* <Route exact path="/">
               {this.state.user ? <BestBooks user={this.state.user} /> : <Login onLogin={this.loginHandler} />}
-            </Route>
-            <Route exact path="/profile">
-              <Profile user={this.state.user} />
-            </Route>
+            </Route> */}
             <Route exact path='/'>
               <LoginButton />
               <LogoutButton />
               {this.props.auth0.isAuthenticated &&
                 <>
                   <Profile />
-                  <Content />
+                  <BestBooks />
+                  {/* <Login onLogin={this.loginHandler} /> */}
                 </>
               }
+            </Route>
+            <Route exact path="/profile">
+              <Profile user={this.state.user} />
             </Route>
           </Switch>
           <Footer />

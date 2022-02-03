@@ -10,9 +10,9 @@ class Profile extends Component {
 
       return (
         <div>
-          <h2>{this.props.auth0.user.name}</h2>
+          <h2> Hello {this.props.auth0.user.name} !</h2>
           <p>{this.props.auth0.user.email}</p>
-          <p>{this.props.auth0.user.picture}</p>
+          <img src={this.props.auth0.user.picture} alt={'The current user'} />
         </div>
       );
 
